@@ -10,7 +10,7 @@ app.get('/', (req, res) => { // ('/' là trang chủ ( tên route )) khởi tạ
 });
 
 app.get('/tours', (req, res) => {
-    res.send('Trang danh sách  tour');
+    res.send('Trang danh sách  tour1111');
 });
 
 app.listen(port, () => { // app.listen là hàm để server chạy

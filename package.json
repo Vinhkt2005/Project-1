@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js", // lệnh để server chạy
+    "dev": "nodemon index.js" // lệnh để server chạy và tự động reload khi có thay đổi 
+    // trong ngoặc {} là thông tin của project có thể tùy chỉnh 
+  },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
   }
 }
