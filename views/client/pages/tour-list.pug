@@ -3,4 +3,9 @@ extends ../layouts/default
 block main
  h1 #{pageTitle}
 
+ ul 
+    each tour in tourList
+        li #{tour.name} ( phương tiện : #{tour.vehicle} )
+   
+
 
