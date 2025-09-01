@@ -2,6 +2,7 @@ const express = require ('express'); //nhúng thư viện express vào dự án 
 const path = require ('path'); //nhúng thư viện path vào dự án để có thể sự dụng để dự án khi đẩy lên online
 //  có thể chỉ ra vị trí thư mục chứa code giao diện
 const mongoose = require ('mongoose'); //nhúng thư viện mongoose vào dự án để có thể sự dụng
+const clientRoutes = require('./routes/client/index.route'); //nhúng thư viện index.route vào dự án để có thể sự dụng
 require('dotenv').config(); //nhúng thư viện dotenv vào dự án để có thể sự dụng
 const app = express(); //khởi tạo  express để tạo server
 const port = 3000; //khởi tạo port để server chạy ( có thể để cổng tùy chọn 3000 hoặc 3001 hoặc 3002)
@@ -9,14 +10,7 @@ const port = 3000; //khởi tạo port để server chạy ( có thể để c�
 // Kết nối với cơ sở dữ liệu mongoDB
 mongoose.connect(process.env.DATABASE);
 
-const Tour = mongoose.model(
-    'Tour', 
-    {
-        name: String,
-        vehicle: String
-    },
-    'tours'
-);
+
 
 // thiết lập cho dự án này biết thư mục chứa code giao diện là gì 
 app.set('views', path.join(__dirname, 'views'));
@@ -30,31 +24,11 @@ app.set('view engine', 'pug');// Thiết lập template engine mà chúng ta dù
 
 app.use(express.static(path.join(__dirname, 'public'))); // Thiết lập cho dự án này biết thư mục chứa file tĩnh 
 
-app.get('/', (req, res) => { // ('/' là trang chủ ( tên route )) khởi tạo route để server chạy, 
-// đứng từ app gọi vào hàm get để lấy dữ liệu từ server
-// (req, res) là tham số để lấy dữ liệu từ server, req là request là dữ liệu từ fontend gửi về phía backend,
-//  res là response là dữ liệu từ backend gửi về phía fontend
-    res.render('client/pages/home', {
-        pageTitle: 'Trang chủ',
-    });
-    // res.render là hàm để render code giao diện
-    // 'client/pages/home' là đường dẫn thư mục chứa code giao diện
-    // (req, res) là tham số để lấy dữ liệu từ server, req là request là dữ liệu từ fontend gửi về phía backend,
-    //  res là response là dữ liệu từ backend gửi về phía fontend
-});
+app.use ('/', clientRoutes); // Sử dụng các route đã khai báo trong file index.route.js
 
-app.get('/tours', async (req, res) => {
-    const tourList = await Tour.find({});
-    console.log(tourList);
-
-    res.render('client/pages/tour-list', {
-        pageTitle: 'Danh sách tour',
-        tourList: tourList
-    });
-});
 
 app.listen(port, () => { // app.listen là hàm để server chạy
     // port là port để server chạy ( có thể để cổng tùy chọn 3000 hoặc 3001 hoặc 3002)
     // () => { là hàm để server chạy
     console.log(`Website đang chạy trên cổng ${port}`);
-});
+})
