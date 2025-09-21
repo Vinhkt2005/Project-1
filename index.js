@@ -1,15 +1,15 @@
 const express = require ('express'); //nhúng thư viện express vào dự án để có thể sự dụng
 const path = require ('path'); //nhúng thư viện path vào dự án để có thể sự dụng để dự án khi đẩy lên online
 //  có thể chỉ ra vị trí thư mục chứa code giao diện
-const mongoose = require ('mongoose'); //nhúng thư viện mongoose vào dự án để có thể sự dụng
-const clientRoutes = require('./routes/client/index.route'); //nhúng thư viện index.route vào dự án để có thể sự dụng
-require('dotenv').config(); //nhúng thư viện dotenv vào dự án để có thể sự dụng
+const mongoose = require ('mongoose');
+const clientRoutes = require('./routes/client/index.route'); 
+const adminRoutes = require('./routes/admin/index.route');
+const databaseConfig = require('./config/database.config');
+require('dotenv').config(); 
 const app = express(); //khởi tạo  express để tạo server
 const port = 3000; //khởi tạo port để server chạy ( có thể để cổng tùy chọn 3000 hoặc 3001 hoặc 3002)
-
-// Kết nối với cơ sở dữ liệu mongoDB
-mongoose.connect(process.env.DATABASE);
-
+const variableConfig = require('./config/variable.config');
+databaseConfig.connect();
 
 
 // thiết lập cho dự án này biết thư mục chứa code giao diện là gì 
@@ -24,6 +24,9 @@ app.set('view engine', 'pug');// Thiết lập template engine mà chúng ta dù
 
 app.use(express.static(path.join(__dirname, 'public'))); // Thiết lập cho dự án này biết thư mục chứa file tĩnh 
 
+app.locals.pathAdmin = variableConfig.pathAdmin;
+
+app.use (`/${variableConfig.pathAdmin}`, adminRoutes);
 app.use ('/', clientRoutes); // Sử dụng các route đã khai báo trong file index.route.js
 
 

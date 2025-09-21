@@ -1,9 +1,12 @@
 const router = require('express').Router();
-const homeRoutes = require('./home.route'); //nhúng thư viện home.route vào dự án để có thể sự dụng
-const tourRoutes = require('./tour.route'); //nhúng thư viện tour.route vào dự án để có thể sự dụng
+const homeRoutes = require('./home.route'); 
+const tourRoutes = require('./tour.route'); 
+const cartRoutes = require('./cart.route'); 
 
 router.use('/', homeRoutes)
 
 router.use('/tours', tourRoutes)
+
+router.use('/cart', cartRoutes)
 
 module.exports = router;
