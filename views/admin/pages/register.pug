@@ -5,7 +5,7 @@ block main
     h2.inner-title Đăng ký
     p.inner-desc Tạo một tài khoản để tiếp tục
     
-    form.inner-form#register-form
+    form.inner-form#register-form(method="post" action=`/${pathAdmin}/account/register`)
       .inner-group
         label(
           class="inner-label"
@@ -53,7 +53,7 @@ block main
             class="inner-label"
             for="agree"
           ) Tôi chấp nhận các điều khoản và điều kiện
-      button(class="inner-button") Đăng Ký
+      button(type="submit" class="inner-button") Đăng Ký
     
     .inner-more
       span Bạn đã có tài khoản?

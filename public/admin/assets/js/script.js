@@ -1,3 +1,5 @@
+const { notify } = require("../../../../routes/admin/account.route");
+
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-button-menu");
 if(buttonMenuMobile) {
@@ -624,3 +626,26 @@ if(sider) {
 }
 
 //end Sider
+
+//logout
+
+const buttonLogout = document.querySelector(".sider .inner-logout");
+if(buttonLogout) {
+  buttonLogout.addEventListener("click", () => {
+    fetch(`/${pathAdmin}/account/logout`, {
+      method: "POST",
+    }).then(response => response.json())
+    .then(data => {
+      if(data.code === "error") {
+        notify.console.error(data.message);
+      }
+      if(data.code === "success") {
+        drawNotify(data.code, data.message);
+        window.location.href = `/${pathAdmin}/account/login`;
+      }
+    });
+  });
+}
+
+
+//end logout

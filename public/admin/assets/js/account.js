@@ -1,3 +1,8 @@
+// Create Notyf
+
+
+// end Notify
+
 // Login Form
 const loginForm = document.querySelector("#login-form");
 if(loginForm) {
@@ -19,36 +24,37 @@ if(loginForm) {
         rule: 'required',
         errorMessage: 'Vui lòng nhập mật khẩu!',
       },
-      {
-        validator: (value) => value.length >= 8,
-        errorMessage: 'Mật khẩu phải chứa ít nhất 8 ký tự!',
-      },
-      {
-        validator: (value) => /[A-Z]/.test(value),
-        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái in hoa!',
-      },
-      {
-        validator: (value) => /[a-z]/.test(value),
-        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ cái thường!',
-      },
-      {
-        validator: (value) => /\d/.test(value),
-        errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
-      },
-      {
-        validator: (value) => /[@$!%*?&]/.test(value),
-        errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
-      },
+      
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
       const password = event.target.password.value;
       const rememberPassword = event.target.rememberPassword.checked;
 
-      console.log(email);
-      console.log(password);
-      console.log(rememberPassword);
+      const dataFinal = {
+        email: email,
+        password: password,
+        rememberPassword: rememberPassword,
+      }
+
+      fetch(`/${pathAdmin}/account/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataFinal),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.code == "error") {
+          notyf.error(data.message);
+        } else {
+          drawNotify(data.code,data.message);
+          window.location.href = `/${pathAdmin}/dashboard`;
+        }
+      })
     })
+   
   ;
 }
 // End Login Form
@@ -107,7 +113,7 @@ if(registerForm) {
         errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
       },
       {
-        validator: (value) => /[@$!%*?&]/.test(value),
+        validator: (value) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value),
         errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
       },
     ])
@@ -122,9 +128,29 @@ if(registerForm) {
       const email = event.target.email.value;
       const password = event.target.password.value;
 
-      console.log(fullName);
-      console.log(email);
-      console.log(password);
+      const dataFinal = {
+
+        fullName: fullName,
+        email: email,
+        password: password,
+      }
+
+      fetch(`/${pathAdmin}/account/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataFinal),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.code == "error") {
+          notyf.error(data.message);
+        } else {
+          drawNotify(data.code,data.message);
+          window.location.href = `/${pathAdmin}/account/register-initial`;
+        }
+      })
     })
   ;
 }
@@ -148,7 +174,26 @@ if(forgotPasswordForm) {
     ])
     .onSuccess((event) => {
       const email = event.target.email.value;
-      console.log(email);
+      const dataFinal = {
+        email: email,
+      };
+
+      fetch(`/${pathAdmin}/account/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataFinal),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.code == "error") {
+          notify.console.error(data.message);
+        } else {
+         window.location.href = `/${pathAdmin}/account/otp-password`;
+        }
+      })
+      ;
     })
   ;
 }
@@ -202,7 +247,7 @@ if(resetPasswordForm) {
         errorMessage: 'Mật khẩu phải chứa ít nhất một chữ số!',
       },
       {
-        validator: (value) => /[@$!%*?&]/.test(value),
+        validator: (value) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value),
         errorMessage: 'Mật khẩu phải chứa ít nhất một ký tự đặc biệt!',
       },
     ])

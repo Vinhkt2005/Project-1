@@ -1,6 +1,8 @@
 const express = require ('express'); //nhúng thư viện express vào dự án để có thể sự dụng
 const path = require ('path'); //nhúng thư viện path vào dự án để có thể sự dụng để dự án khi đẩy lên online
 //  có thể chỉ ra vị trí thư mục chứa code giao diện
+
+const cookieParser = require('cookie-parser');
 const mongoose = require ('mongoose');
 const clientRoutes = require('./routes/client/index.route'); 
 const adminRoutes = require('./routes/admin/index.route');
@@ -25,6 +27,14 @@ app.set('view engine', 'pug');// Thiết lập template engine mà chúng ta dù
 app.use(express.static(path.join(__dirname, 'public'))); // Thiết lập cho dự án này biết thư mục chứa file tĩnh 
 
 app.locals.pathAdmin = variableConfig.pathAdmin;
+
+// tạo biến toàn cục trong file Backend
+global.pathAdmin = variableConfig.pathAdmin;
+
+// cho phép gửi dữ liệu dạng json sang backend
+app.use(express.json());
+
+app.use(cookieParser());//lấy cookies
 
 app.use (`/${variableConfig.pathAdmin}`, adminRoutes);
 app.use ('/', clientRoutes); // Sử dụng các route đã khai báo trong file index.route.js
